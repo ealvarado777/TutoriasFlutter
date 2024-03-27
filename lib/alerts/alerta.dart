@@ -97,8 +97,8 @@ class ShowAlerta {
                   ElevatedButton(
                     onPressed: () async {
                       //formController.reset();
-                      //formController.save();
-
+                      formController.save();
+                      formController.reset();
                       Navigator.of(context).pop(false); //Retorna true
                     },
                     child: Padding(
@@ -152,5 +152,99 @@ class ShowAlerta {
       },
     );
     return result ?? "";
+  }
+
+  static Future<bool> alertConfirmacion(
+      BuildContext context, String titulo, String mensaje) async {
+    bool? result = await showDialog<bool>(
+      context: context,
+      barrierDismissible:
+          false, // esto debe ser false si quieres forzar una selección
+      builder: (context) {
+        return WillPopScope(
+          onWillPop: () async {
+            return false;
+          },
+          child: AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)),
+            title: Text("$titulo"),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  /*  Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: Row(
+                      children:[Text(""),Text(""),Text("")],
+                    ),
+                  ),*/
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                            child: Center(
+                                child: Text(
+                          mensaje,
+                          textAlign: TextAlign.center,
+                        ))),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+
+                  //FlutterLogo(size:100.0)
+                ],
+              ),
+            ),
+            actions: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ElevatedButton(
+                    onPressed: () async {
+                      Navigator.of(context).pop(false); //Retorna true
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 3, vertical: 4),
+                      child: Text(
+                        'Cancelar',
+                        style: TextStyle(
+                          fontSize:
+                              10, // Ajusta este valor para cambiar el tamaño del texto
+                        ),
+                      ),
+                    ),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.red),
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      Navigator.of(context).pop(true); //Retorna true
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 3, vertical: 4),
+                      child: Text(
+                        'Aceptar',
+                        style: TextStyle(
+                          fontSize:
+                              10, // Ajusta este valor para cambiar el tamaño del texto
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+    return result ?? false;
   }
 }

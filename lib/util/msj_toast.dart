@@ -7,7 +7,7 @@ class ToastMsjWidget {
       {required String mensaje,
       required int tiempoespera,
       required ToastType type,
-      required VoidCallback onChange}) {
+      required VoidCallback? onChange}) {
     Color? backgroundColor;
     String? titleMSJ;
     IconData? iconopersonalizado;
