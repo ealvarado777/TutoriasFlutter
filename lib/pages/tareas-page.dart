@@ -13,7 +13,9 @@ class TareasPage extends StatefulWidget {
 
 class _TareasPageState extends State<TareasPage> {
   late FormController _formController;
+
   List<String> tareas = [];
+  List<String> copiaTareas = [];
 
   ///segunda parte///////////////////
   late FormController _buscadorController;
@@ -50,6 +52,7 @@ class _TareasPageState extends State<TareasPage> {
             }
 
             tareas.add(result);
+            copiaTareas.add(result);
             setState(() {});
           }),
       appBar: AppBar(
@@ -90,8 +93,17 @@ class _TareasPageState extends State<TareasPage> {
                             border:
                                 OutlineInputBorder(), // Agrega un borde alrededor del campo de texto
                           ),
-                          onChanged: (value) {
-                            print("");
+                          onChanged: (v) {
+                            if (v == "") {
+                              //tareas=copiaTareas;
+                              tareas = List<String>.from(copiaTareas);
+                              setState(() {});
+                              return;
+                            }
+
+                            tareas =
+                                tareas.where((t) => t.contains(v)).toList();
+                            setState(() {});
                           },
                           controller:
                               _buscadorController.controller("busqueda"),
@@ -129,17 +141,17 @@ class _TareasPageState extends State<TareasPage> {
                     ),
                   ],
                 ),
-              ), */
+              ),*/
               SizedBox(
                 height: 10,
               ),
               Container(
-                color: Colors.red,
+                //color:Colors.red,
                 width: size.width,
                 height: size.height / 1.5,
                 child: ListView.builder(
                   itemCount: tareas.length,
-                  itemBuilder: (context, index) {
+                  itemBuilder: (contet, index) {
                     String tareaIndex = tareas[index];
                     return Slidable(
                       key: const ValueKey(0),
@@ -179,6 +191,7 @@ class _TareasPageState extends State<TareasPage> {
                               }
 
                               tareas.removeAt(index);
+                              copiaTareas.removeAt(index);
                               setState(() {});
                               ToastMsjWidget.displayMotionToast(context,
                                   mensaje: "Tarea eliminado con exito",
@@ -212,7 +225,9 @@ class _TareasPageState extends State<TareasPage> {
                               if (result.runtimeType == bool) {
                                 return;
                               }
+
                               tareas[index] = result;
+                              copiaTareas[index] = result;
                               //tareas.add(result);
                               setState(() {});
                             },
