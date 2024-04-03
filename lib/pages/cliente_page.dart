@@ -13,6 +13,11 @@ class _ClientePageState extends State<ClientePage> {
   final TextEditingController _searchQueryController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
