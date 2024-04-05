@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:hola_mundo/view_models/cliente_view_model.dart';
 import 'package:hola_mundo/widgets/side_menu.dart';
+import 'package:provider/provider.dart';
 
 class ClientePage extends StatefulWidget {
   const ClientePage({super.key});
@@ -15,6 +18,14 @@ class _ClientePageState extends State<ClientePage> {
   @override
   void initState() {
     super.initState();
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      iniciar();
+    });
+  }
+
+  void iniciar() {
+    ClienteViewModel clienteViewModel = ClienteViewModel();
+    clienteViewModel.iniciar(contextA: context);
   }
 
   @override
@@ -27,14 +38,27 @@ class _ClientePageState extends State<ClientePage> {
         title: _isSearching ? _buildSearchField() : const Text('Clientes'),
         actions: _buildActions(),
       ),
-      body: body(),
+      body: body(size),
     );
   }
 
-  Widget body() {
+  Widget body(Size size) {
     return SafeArea(
         child: SingleChildScrollView(
-      child: Column(children: []),
+      child: Column(children: [
+        Consumer<ClienteViewModel>(builder: (context, item, child) {
+          return ListView.builder(
+            itemCount: item.clientes.length,
+            itemBuilder: (context, index) {
+              Map<String, dynamic> cliente = item.clientes[index];
+
+              return ListTile(
+                title: Text(cliente["nombres"]),
+              );
+            },
+          );
+        })
+      ]),
     ));
   }
 

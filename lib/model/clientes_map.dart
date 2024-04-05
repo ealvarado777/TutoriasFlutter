@@ -1,35 +1,27 @@
+import 'dart:convert';
+
 class ClienteMap {
-  static Map<String, dynamic> clienteMapConverter(Map<String, dynamic> json) {
-    Map<String, dynamic> mapaCabecera = {};
+  static List<Map<String, dynamic>> clienteMapConverter(String str) {
+    List<Map<String, dynamic>> clienteMap = [];
 
     try {
-      mapaCabecera.addAll({"success": json['success'] ?? false});
-      mapaCabecera.addAll({"message": json['message'] ?? ""});
+      List<Map<String, dynamic>> dataConverter =
+          List<Map<String, dynamic>>.from(json.decode(str));
 
-      List<Map<String, dynamic>> listaData = [];
-      List<Map<String, dynamic>> listaDynamic = [];
-
-      if (json['data'] != null) {
-        listaDynamic = List<Map<String, dynamic>>.from(
-          json["data"].map((item) => item as Map<String, dynamic>),
-        );
-
-        listaDynamic.forEach((l) {
-          Map<String, dynamic> mapaData = {
-            "nombres": l['nombres'] ?? "",
-            "apellidos": l['apellidos'] ?? "",
-            "tipoIdentificacion": l["tipoIdentificacion"] ?? "",
-            "numIdentificacion": l["numIdentificacion"] ?? "",
-            "fechaNacimiento": l["fechaNacimiento"] ?? ""
-          };
-          listaData.add(mapaData);
-        });
-      }
-      mapaCabecera.addAll({"data": listaData});
+      dataConverter.forEach((data) {
+        Map<String, dynamic> mapaData = {
+          "id": data['id'] ?? "",
+          "nombres": data['nombres'] ?? "",
+          "apellidos": data["apellidos"] ?? "",
+          "tipoIdentificacion": data["tipoIdentificacion"] ?? "",
+          "numIdentificacion": data["numIdentificacion"] ?? "",
+          "fechaNacimiento": data["fechaNacimiento"] ?? ""
+        };
+        clienteMap.add(mapaData);
+      });
     } catch (ex) {
       print("error al formapear a un mapa en especifico----->" + ex.toString());
     }
-
-    return mapaCabecera;
+    return clienteMap;
   }
 }

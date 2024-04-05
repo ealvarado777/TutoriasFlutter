@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hola_mundo/routes/routes.dart';
+import 'package:hola_mundo/view_models/cliente_view_model.dart';
 import 'package:hola_mundo/view_models/contador_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -26,6 +27,9 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(
           create: (_) => ContadorProvider(), //QRScan //ShowMasterProvider
         ),
+        ChangeNotifierProvider(
+          create: (_) => ClienteViewModel(), //QRScan //ShowMasterProvider
+        )
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

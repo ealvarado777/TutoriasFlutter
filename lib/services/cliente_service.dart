@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:hola_mundo/interceptor/custom_interceptor.dart';
 import 'package:hola_mundo/model/clientes_map.dart';
 import 'package:http/http.dart' as http;
 
@@ -11,44 +13,40 @@ class ClienteService {
     urlApiJSON = apiurlApi.toString();
   }
 
-  static Future<Map<String, dynamic>> consultarClientes(
-      {required String filtro}) async {
+  static Future<Map<String, dynamic>> consultarClientes() async {
     await initialize();
     String url1 = "${urlApiJSON}/clientes";
-
     var url = Uri.parse(url1);
-
     Map<String, dynamic> mapResponse = {};
-
+    /* var dio = Dio();
+    dio.interceptors.add(CustomInterceptor()); */
     try {
       var headers = {
         'Content-Type': 'application/json',
-        //"Authorization": "Bearer $token"
+        //"Authorization":"Bearer $token"
       };
 
-      print("url consultar clientes--->" + url1.toString());
+      print("url cliente-->" + url1.toString());
 
       final response = await http.get(
         url,
         headers: headers,
       );
 
-      print("response-consultarClientes->" + response.body.toString());
+      print("response clientes----->" + response.body.toString());
 
       if (response.statusCode == 200 || response.statusCode == 400) {
-        final Map<String, dynamic> listaCod =
-            ClienteMap.clienteMapConverter(json.decode(response.body));
         mapResponse.addAll({"success": true});
-        mapResponse.addAll({"body": listaCod});
-      } else {
-        mapResponse.addAll({"success": false});
-        mapResponse.addAll({"body": response.body});
+        mapResponse
+            .addAll({"body": ClienteMap.clienteMapConverter(response.body)});
+        return mapResponse;
       }
-    } /*on TimeoutException catch (e){
-      mapResponse.addAll({"codigo": 3});
-      mapResponse.addAll({"body": "Tiempo de espera superado"});
-    }*/
-    catch (ex) {
+
+      mapResponse.addAll({"success": false});
+      mapResponse.addAll({"body": response.body});
+      return mapResponse;
+    } catch (ex, e) {
+      print("error-->" + ex.toString());
       mapResponse.addAll({"success": false});
       mapResponse.addAll({"body": ex.toString()});
     }
