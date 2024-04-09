@@ -14,8 +14,7 @@ class ClienteMap {
           "nombres": data['nombres'] ?? "",
           "apellidos": data["apellidos"] ?? "",
           "tipoIdentificacion": data["tipoIdentificacion"] ?? "",
-          "numIdentificacion": data["numIdentificacion"] ?? "",
-          "fechaNacimiento": data["fechaNacimiento"] ?? ""
+          "numIdentificacion": data["numIdentificacion"] ?? ""
         };
         clienteMap.add(mapaData);
       });

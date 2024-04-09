@@ -4,14 +4,15 @@ import 'package:hola_mundo/util/loading_overlay.dart';
 import 'package:hola_mundo/util/msj_toast.dart';
 
 class ClienteViewModel extends ChangeNotifier {
-  List<Map<String, dynamic>> clientes = [];
-  // Paso 1: Crear una instancia privada de ClienteViewModel
+
+  List<Map<String, dynamic>> clientes = [];//la que se muestra
+
+  List<Map<String,dynamic>>copiaClientes=[];
+
   static final ClienteViewModel _instance = ClienteViewModel._internal();
 
-  // Paso 2: Constructor privado
   ClienteViewModel._internal();
 
-  // Paso 3: Método para acceder a la instancia única
   factory ClienteViewModel() => _instance;
 
   void asignarClientes({required List<Map<String, dynamic>> c}) {
@@ -59,7 +60,47 @@ class ClienteViewModel extends ChangeNotifier {
           onChange: () {});
       return;
     }
-    clientes = response;
+    clientes=response;
+    clientes=clientes.reversed.toList();
+    copiaClientes=List<Map<String,dynamic>>.from(clientes);
     notifyListeners();
   }
+
+  void buscarCliente({required String filtro}){
+
+       if(filtro.isEmpty){
+         clientes=List<Map<String,dynamic>>.from(copiaClientes);
+         notifyListeners();
+         return;
+       }
+
+       clientes=copiaClientes.where((cliente)=>cliente["nombres"].toString().contains(filtro)).toList();
+       notifyListeners();
+
+  }
+
+
+  void eliminarCliente({required int idCliente,
+  required BuildContext contextA
+  })async{
+
+      Map<String,dynamic>mapCliente=await ClienteService.eliminarCliente(id:idCliente);
+      bool success=mapCliente["success"];
+      if(!success){
+
+        ToastMsjWidget.displayMotionToast(contextA,mensaje:mapCliente["body"],
+            tiempoespera:5,type:ToastType.error,onChange:null);
+        return;
+      }
+
+      consultarClientes(contextA:contextA);
+      ToastMsjWidget.displayMotionToast(contextA,mensaje:"Cliente eliminado con exito",
+          tiempoespera:5,type:ToastType.success,onChange:null);
+
+
+  }
+
+
+
+
 }
