@@ -3,7 +3,7 @@ import 'package:hola_mundo/services/cliente_service.dart';
 import 'package:hola_mundo/util/loading_overlay.dart';
 import 'package:hola_mundo/util/msj_toast.dart';
 
-class ClienteViewModel extends ChangeNotifier {
+class ClienteViewModel extends ChangeNotifier{
   List<Map<String, dynamic>> clientes = []; //la que se muestra
 
   List<Map<String, dynamic>> copiaClientes = [];
@@ -14,18 +14,18 @@ class ClienteViewModel extends ChangeNotifier {
 
   factory ClienteViewModel() => _instance;
 
-  void asignarClientes({required List<Map<String, dynamic>> c}) {
+  void asignarClientes({required List<Map<String, dynamic>> c}){
     clientes = c;
     notifyListeners();
   }
 
-  void addClientes({required Map<String, dynamic> m}) {
+  void addClientes({required Map<String, dynamic> m}){
     clientes.add(m);
     notifyListeners();
   }
 
-  void iniciar({required BuildContext contextA}) {
-    consultarClientes(contextA: contextA);
+  void iniciar({required BuildContext contextA}){
+    consultarClientes(contextA:contextA);
   }
 
   Future<void> consultarClientes({required BuildContext contextA}) async {

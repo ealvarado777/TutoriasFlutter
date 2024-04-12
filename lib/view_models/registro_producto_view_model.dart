@@ -40,17 +40,67 @@ class RegistroProductoViewModel extends ChangeNotifier{
            formController.set("nombre",producto["nombre"]);
            formController.set("precio",producto["precio"]);
        }
+     }
+
+     void modificarProducto({required FormController formController,
+       required BuildContext contextA,
+       required Map<String,dynamic>producto
+     })async{
+
+       LoadingOverlay loadingOverlay=LoadingOverlay();
+       loadingOverlay.show(contextA);
+       final Map<String,dynamic>body=await ProductoService.modificarProducto(
+           id:producto["id"],
+           nombre:formController.controller("nombre").text.toString(),
+           precio:formController.controller("precio").text.toString()
+       );
+       bool success=body["success"];
+       if(!success){
+         loadingOverlay.hide();
+         ToastMsjWidget.displayMotionToast(contextA,
+             mensaje: "No se pudo modificar producto",
+             tiempoespera: 5,
+             type: ToastType.info,
+             onChange: () {});
+
+         return;
+       }
+       loadingOverlay.hide();
+       ToastMsjWidget.displayMotionToast(contextA,
+           mensaje:"producto modificado con exito",
+           tiempoespera:5,
+           type:ToastType.success,
+           onChange:(){});
+       limpiar(formController: formController);
+       productoViewModel.iniciar(contextA: contextA);
+       Navigator.of(contextA).pop();
+       notifyListeners();
+       return;
+
+
+
+
 
      }
 
 
+
      void registrarProducto({required FormController formController,
-     required BuildContext contextA
+     required BuildContext contextA,required Map<String,dynamic>producto
      })async{
 
         if(!formController.validate()){
             return;
         }
+
+        if(producto.isNotEmpty){
+          modificarProducto(formController:formController,contextA:contextA,
+          producto:producto
+          );
+          return;
+        }
+
+
 
         LoadingOverlay loadingOverlay=LoadingOverlay();
         loadingOverlay.show(contextA);

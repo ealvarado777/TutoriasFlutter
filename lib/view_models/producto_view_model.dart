@@ -14,8 +14,14 @@ class ProductoViewModel extends ChangeNotifier{
 
   factory ProductoViewModel() => _instance;
 
+
+
+
+
+
   void iniciar({required BuildContext contextA}){
 
+    consultarProductos(contextA:contextA);
   }
 
   Future<void>consultarProductos({required BuildContext contextA})async{
@@ -50,6 +56,46 @@ class ProductoViewModel extends ChangeNotifier{
     productos=c;
     notifyListeners();
   }
+
+  void buscarProducto({required String filtro}){
+    if(filtro.isEmpty){
+      productos=List<Map<String, dynamic>>.from(copiaProductos);
+      notifyListeners();
+      return;
+    }
+
+    productos=copiaProductos
+        .where((producto)=>producto["nombre"]
+        .toString()
+        .toLowerCase()
+        .contains(filtro.toLowerCase()))
+        .toList();
+    notifyListeners();
+  }
+
+  void eliminarProducto(
+      {required int idProducto,required BuildContext contextA}) async{
+
+    Map<String,dynamic>mapProducto=
+    await ProductoService.eliminarProductos(id:idProducto);
+    bool success=mapProducto["success"];
+    if (!success){
+      ToastMsjWidget.displayMotionToast(contextA,
+          mensaje: mapProducto["body"],
+          tiempoespera: 5,
+          type: ToastType.error,
+          onChange: null);
+      return;
+    }
+
+    consultarProductos(contextA:contextA);
+    ToastMsjWidget.displayMotionToast(contextA,
+        mensaje:"producto eliminado con exito",
+        tiempoespera: 5,
+        type: ToastType.success,
+        onChange: null);
+  }
+
 
 
 

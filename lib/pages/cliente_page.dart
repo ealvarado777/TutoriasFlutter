@@ -37,7 +37,14 @@ class _ClientePageState extends State<ClientePage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      floatingActionButton: _floatinButtonWidget(),
+      floatingActionButton:FloatingActionButton(
+        onPressed: () {
+          Map<String,dynamic>cliente={};
+          Navigator.of(context).pushNamed("formCliente",arguments:{"cliente":cliente});
+          //Navigator.of(context).pushNamed("RegistrosPage");
+        },
+        child: const Icon(Icons.add),
+      ),
       drawer: SideMenu(),
       appBar: AppBar(
         centerTitle: true,
@@ -84,19 +91,20 @@ class _ClientePageState extends State<ClientePage> {
                         icon: Icons.delete,
                       ),
                       SlidableAction(
-                        onPressed: (e) async {
-                          bool resp = await ShowAlerta.alertConfirmacion(
+                        onPressed:(e)async{
+
+                          bool resp=await ShowAlerta.alertConfirmacion(
                               context,
                               "Confirmacion",
                               "¿Estas seguro de editar este cliente ${cliente["nombres"]}?");
 
-                          if (!resp) {
+                          if(!resp){
                             return;
                           }
 
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                  RegistrosPage(cliente: cliente)));
+                          Navigator.of(context).pushNamed("formCliente",arguments:{"cliente":cliente});
+
+
                         },
                         backgroundColor: const Color(0xFF0392CF),
                         foregroundColor: Colors.white,
@@ -165,27 +173,28 @@ class _ClientePageState extends State<ClientePage> {
       decoration: InputDecoration(
         hintText: 'Buscar...',
         border: InputBorder.none,
-        hintStyle: TextStyle(color: Colors.white54),
+        hintStyle: TextStyle(color:Colors.black),
       ),
-      style: TextStyle(color: Colors.white, fontSize: 16.0),
+      style:TextStyle(color:Colors.black,fontSize: 16.0),
     );
   }
 }
 
-class _floatinButtonWidget extends StatelessWidget {
+/*class _floatinButtonWidget extends StatelessWidget{
   const _floatinButtonWidget({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
     return FloatingActionButton(
       onPressed: () {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => RegistrosPage(cliente: {})));
+        Navigator.of(context).pushReplacementNamed("formCliente",arguments:{"cliente":cliente});
         //Navigator.of(context).pushNamed("RegistrosPage");
       },
       child: const Icon(Icons.add),
     );
-  }
-}
+  }*/
+
+
+

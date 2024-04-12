@@ -26,7 +26,7 @@ class _ProductoPageState extends State<ProductoPage>{
     print("iniciar pagina producto");
     SchedulerBinding.instance.addPostFrameCallback((_){
       productoViewModel=ProductoViewModel();
-      productoViewModel.consultarProductos(contextA:context);
+      productoViewModel.iniciar(contextA:context);
 
     });
   }
@@ -40,6 +40,8 @@ class _ProductoPageState extends State<ProductoPage>{
            floatingActionButton:FloatingActionButton(
                child:Icon(Icons.add),
                onPressed:(){
+
+                 Navigator.of(context).pushNamed("formProducto");
 
                  Navigator.of(context).push(MaterialPageRoute(
                      builder:(context)=>RegistroProductoPage(producto:{},)));
@@ -78,10 +80,18 @@ class _ProductoPageState extends State<ProductoPage>{
                                     motion:ScrollMotion(),
                                     children:[
                                        SlidableAction(
-                                          onPressed:(e){
+                                          onPressed:(e)async{
 
-                                              ShowAlerta.alertConfirmacion(context,"Confirmacion",
+                                              bool resp=await ShowAlerta.alertConfirmacion(context,"Confirmacion",
                                                   "¿Estas seguro de eliminar este producto ${producto["nombre"]}?");
+
+                                              if(!resp){
+                                                 return;
+                                              }
+
+                                              productoViewModel.eliminarProducto(idProducto:producto["id"],contextA:context);
+
+
 
                                           },
                                          backgroundColor: Color(0xFFFE4A49),
@@ -89,10 +99,20 @@ class _ProductoPageState extends State<ProductoPage>{
                                          icon: Icons.delete,
                                        ),
                                       SlidableAction(
-                                        onPressed:(e){
+                                        onPressed:(e)async{
 
-                                          ShowAlerta.alertConfirmacion(context,"Confirmacion",
+                                          bool resp=await ShowAlerta.alertConfirmacion(context,"Confirmacion",
                                               "¿Estas seguro de editar este producto ${producto["nombre"]}?");
+
+                                          if(!resp){
+                                             return;
+                                          }
+
+                                          Navigator.of(context).push(MaterialPageRoute(
+                                              builder:(context)=>RegistroProductoPage(producto:producto,)));
+                                          //RegistroProductoPage
+
+
 
                                         },
                                         backgroundColor: Color(0xFF0392CF),
@@ -136,15 +156,15 @@ class _ProductoPageState extends State<ProductoPage>{
       autofocus:true,
       onChanged:(e){
 
-
+        productoViewModel.buscarProducto(filtro:e.toString());
 
       },
       decoration: InputDecoration(
         hintText: 'Buscar...',
         border: InputBorder.none,
-        hintStyle: TextStyle(color: Colors.white54),
+        hintStyle: TextStyle(color: Colors.black),
       ),
-      style: TextStyle(color: Colors.white, fontSize: 16.0),
+      style: TextStyle(color: Colors.black, fontSize: 16.0),
     );
   }
 
@@ -158,7 +178,7 @@ class _ProductoPageState extends State<ProductoPage>{
             setState(() {
               _isSearching = false;
               _searchQueryController.clear();
-
+              productoViewModel.buscarProducto(filtro:"");
               FocusScope.of(contextA).unfocus();
 
             });

@@ -15,6 +15,79 @@ class ProductoService{
        urlApiJSON=apiurlApi.toString();
      }
 
+     static Future<Map<String,dynamic>>modificarProducto({required String nombre,
+       required String precio,required int id
+     })async{
+
+       String url1="${urlApiJSON}/productos/${id}";
+       var url=Uri.parse(url1);
+       Map<String, dynamic>mapResponse={};
+       String jsonEnviado=createJson(nombre:nombre,precio:precio);
+
+       try{
+
+         final response=await http.put(
+           url,
+           headers: {
+             'Content-Type': 'application/json',
+           },
+           body: jsonEnviado,
+         );
+
+         if(response.statusCode==200){
+           mapResponse.addAll({"success":true});
+           return mapResponse;
+         }
+
+
+       }catch(ex){
+
+         mapResponse.addAll({"success":false});
+         mapResponse.addAll({"body":false});
+       }
+
+       return mapResponse;
+     }
+
+
+     static Future<Map<String,dynamic>>eliminarProductos({required int id})async{
+       await initialize();
+       String url1="${urlApiJSON}/productos/${id}";
+       var url=Uri.parse(url1);
+       Map<String,dynamic>mapResponse={};
+       try{
+
+         var headers={
+           'Content-Type': 'application/json',
+           //"Authorization":"Bearer $token"
+         };
+
+         final response=await http.delete(
+           url,
+           headers:headers,
+         );
+
+         print("response consulta productos-->"+response.body.toString());
+
+         if(response.statusCode==200){
+
+           mapResponse.addAll({"success":true});
+           return mapResponse;
+         }
+         mapResponse.addAll({"success":false});
+         mapResponse.addAll({"body":response.body});
+         return mapResponse;
+
+       }catch(ex){
+
+         mapResponse.addAll({"success": false});
+         mapResponse.addAll({"body": ex.toString()});
+         return mapResponse;
+       }
+       return mapResponse;
+     }
+
+
      static Future<Map<String,dynamic>>guardarProducto({required String nombre,
      required String precio
      })async{

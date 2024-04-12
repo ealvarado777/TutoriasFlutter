@@ -7,9 +7,9 @@ import 'package:provider/provider.dart';
 
 class RegistrosPage extends StatefulWidget{
 
-  final Map<String,dynamic>cliente;
+  //final Map<String,dynamic>cliente;
 
-  const RegistrosPage({super.key,required this.cliente});
+  const RegistrosPage({super.key});
 
   @override
   State<RegistrosPage> createState() => _RegistrosPageState();
@@ -18,23 +18,35 @@ class RegistrosPage extends StatefulWidget{
 class _RegistrosPageState extends State<RegistrosPage>{
   late FormController _formController;
   late RegistroClienteViewModel registroClienteViewModel;
+  Map<String,dynamic>cliente={};
 
   @override
   void initState(){
     super.initState();
+
+
+
+
+
     registroClienteViewModel=RegistroClienteViewModel();
     _formController=FormController(controllers: {'nombre': true});
     _formController=FormController(controllers: {'apellido': true});
     _formController=FormController(controllers: {'identificacion': true});
     SchedulerBinding.instance.addPostFrameCallback((_){
       registroClienteViewModel.init(
-          cliente:widget.cliente,
+          cliente:cliente,
           contextA:context,formController:_formController);
     });
+}
 
+  @override
+  void didChangeDependencies(){
+    super.didChangeDependencies();
+
+    final Map<String,dynamic>args=ModalRoute.of(context)!.settings.arguments as Map<String,dynamic>;
+
+    cliente=args["cliente"]??{}; // Producto() es un
   }
-
-
 
 
   @override
@@ -49,7 +61,7 @@ class _RegistrosPageState extends State<RegistrosPage>{
           },
         ),
         centerTitle:true,
-        title:widget.cliente.isEmpty?Text("Registro Cliente"):Text("Modificar Cliente"),
+        title:cliente.isEmpty?Text("Registro Cliente"):Text("Modificar Cliente"),
       ),
       body: bodytWidget(size),
     );
@@ -146,7 +158,7 @@ class _RegistrosPageState extends State<RegistrosPage>{
                       onPressed:(){
                         registroClienteViewModel.registrarCliente(
                             contextA:context,formController:_formController,
-                            cliente:widget.cliente);
+                            cliente:cliente);
                       },
                       child: Text("Guardar"))
                 ],
