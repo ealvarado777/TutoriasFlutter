@@ -4,6 +4,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hola_mundo/routes/routes.dart';
 import 'package:hola_mundo/view_models/cliente_view_model.dart';
 import 'package:hola_mundo/view_models/contador_view_model.dart';
+import 'package:hola_mundo/view_models/producto_view_model.dart';
+import 'package:hola_mundo/view_models/registro_producto_view_model.dart';
 import 'package:hola_mundo/view_models/registro_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -20,9 +22,10 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp>{
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -33,8 +36,17 @@ class _MyAppState extends State<MyApp> {
         ), //RegistroClienteViewModel
         ChangeNotifierProvider(
           create: (_) =>
-              RegistroClienteViewModel(), //QRScan //ShowMasterProvider
+              RegistroClienteViewModel(), //QRScan //ShowMasterProvider //ProductoViewModel
         ),
+        ChangeNotifierProvider(
+          create:(_)=>
+              ProductoViewModel(), //QRScan //ShowMasterProvider //ProductoViewModel
+        ),//RegistroProductoViewModel
+        ChangeNotifierProvider(
+          create:(_)=>
+              RegistroProductoViewModel(), //QRScan //ShowMasterProvider //ProductoViewModel
+        )
+
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

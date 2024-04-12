@@ -15,6 +15,45 @@ class ClienteService{
     urlApiJSON=apiurlApi.toString();
   }
 
+  static Future<Map<String,dynamic>>modificarCliente(
+      { required int idCliente,
+        required String nombres,
+        required String apellidos,
+        required String tipoIdentificacion,
+        required String numIdentificacion})async{
+    String url1 = "${urlApiJSON}/clientes/${idCliente}";
+    var url = Uri.parse(url1);
+    Map<String, dynamic>mapResponse={};
+    String jsonEnviado=createJson(
+        nombres: nombres,
+        apellidos: apellidos,
+        tipoIdentificacion: tipoIdentificacion,
+        numIdentificacion: numIdentificacion);
+
+    try{
+
+      print("url modificar cliente------>");
+      final response=await http.put(
+        url,
+        headers:{
+          'Content-Type': 'application/json',
+        },
+        body: jsonEnviado,
+      );
+
+      if (response.statusCode == 200){
+        mapResponse.addAll({"success": true});
+        return mapResponse;
+      }
+    } catch (ex) {
+      mapResponse.addAll({"success": false});
+    }
+
+    return mapResponse;
+  }
+
+
+
   static Future<Map<String,dynamic>>eliminarCliente({required int id})async{
     String url1="${urlApiJSON}/clientes/${id}";
     var url=Uri.parse(url1);

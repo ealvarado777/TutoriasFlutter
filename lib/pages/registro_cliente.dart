@@ -48,8 +48,8 @@ class _RegistrosPageState extends State<RegistrosPage>{
             Navigator.of(context).pop();
           },
         ),
-        centerTitle: true,
-        title: const Text("Registro Cliente"),
+        centerTitle:true,
+        title:widget.cliente.isEmpty?Text("Registro Cliente"):Text("Modificar Cliente"),
       ),
       body: bodytWidget(size),
     );
@@ -141,7 +141,7 @@ class _RegistrosPageState extends State<RegistrosPage>{
                       ),
                     );
                   }),
-                  SizedBox(height: 10),
+                  SizedBox(height:10),
                   ElevatedButton(
                       onPressed:(){
                         registroClienteViewModel.registrarCliente(

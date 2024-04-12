@@ -124,10 +124,42 @@ class RegistroClienteViewModel extends ChangeNotifier {
     required Map<String,dynamic>cliente
   })async{
 
-      ToastMsjWidget.displayMotionToast(contextA,mensaje:"Modificado con exito",
-          tiempoespera:10,type:ToastType.success,onChange:(){
 
-          });
+    LoadingOverlay loadingOverlay=LoadingOverlay();
+    loadingOverlay.show(contextA);
+    final Map<String,dynamic>body=await ClienteService.modificarCliente(
+        idCliente:cliente["id"],
+        nombres:formController.controller("nombre").text.toString(),
+        apellidos:formController.controller("apellido").text.toString(),
+        numIdentificacion:
+        formController.controller("identificacion").text.toString(),
+        tipoIdentificacion:identificacionSelect["tipo"]);
+    bool success=body["success"];
+    if(!success){
+      loadingOverlay.hide();
+      ToastMsjWidget.displayMotionToast(contextA,
+          mensaje: "No se pudo modificar cliente",
+          tiempoespera: 5,
+          type: ToastType.info,
+          onChange: () {});
+
+      return;
+    }
+    loadingOverlay.hide();
+    ToastMsjWidget.displayMotionToast(contextA,
+        mensaje: "Cliente modificado con exito",
+        tiempoespera:5,
+        type:ToastType.success,
+        onChange:(){});
+    limpiar(formController: formController);
+    clienteViewModel.iniciar(contextA: contextA);
+    Navigator.of(contextA).pop();
+    notifyListeners();
+    return;
+
+
+
+
 
   }
 
@@ -137,6 +169,9 @@ class RegistroClienteViewModel extends ChangeNotifier {
       required BuildContext contextA,
       required Map<String,dynamic>cliente
       })async{
+    
+    
+
 
     if(formController.validate()){
 
@@ -169,7 +204,7 @@ class RegistroClienteViewModel extends ChangeNotifier {
       ToastMsjWidget.displayMotionToast(contextA,
           mensaje: "Cliente guardado con exito",
           tiempoespera: 5,
-          type: ToastType.info,
+          type: ToastType.success,
           onChange: () {});
       limpiar(formController: formController);
       clienteViewModel.iniciar(contextA: contextA);

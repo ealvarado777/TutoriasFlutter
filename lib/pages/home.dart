@@ -8,8 +8,9 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
-      drawer: SideMenu(),
-      appBar: AppBar(
+      drawer:SideMenu(),
+      appBar:AppBar(
+           backgroundColor:Colors.blue,
           centerTitle: true,
           title: Text(
             "Home",

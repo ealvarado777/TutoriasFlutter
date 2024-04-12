@@ -78,6 +78,15 @@ class SideMenu extends StatelessWidget {
             onTap: () {
               Navigator.of(context).pushReplacementNamed("ClientePage");
             },
+          ),
+          ListTile(
+            trailing: Icon(Icons.keyboard_arrow_right),
+            hoverColor: Colors.blue,
+            leading: Icon(Icons.content_paste_search_rounded),
+            title: Text("productos"),
+            onTap: () {
+              Navigator.of(context).pushReplacementNamed("Producto");
+            },
           )
         ],
       ),
