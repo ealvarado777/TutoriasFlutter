@@ -24,10 +24,6 @@ class _RegistrosPageState extends State<RegistrosPage>{
   void initState(){
     super.initState();
 
-
-
-
-
     registroClienteViewModel=RegistroClienteViewModel();
     _formController=FormController(controllers: {'nombre': true});
     _formController=FormController(controllers: {'apellido': true});

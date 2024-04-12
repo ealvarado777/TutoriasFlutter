@@ -8,9 +8,9 @@ import 'package:hola_mundo/view_models/registro_producto_view_model.dart';
 
 class RegistroProductoPage extends StatefulWidget{
 
-  final Map<String,dynamic>producto;
 
-  const RegistroProductoPage({super.key,required this.producto});
+
+  const RegistroProductoPage({super.key});
 
   @override
   State<RegistroProductoPage> createState() => _RegistroProductoPageState();
@@ -20,6 +20,7 @@ class _RegistroProductoPageState extends State<RegistroProductoPage>{
 
   late FormController _formController;
   late RegistroProductoViewModel registroProductoViewModel;
+  Map<String,dynamic>producto={};
 
   @override
   void initState(){
@@ -29,10 +30,20 @@ class _RegistroProductoPageState extends State<RegistroProductoPage>{
     _formController=FormController(controllers:{'precio':false});
     SchedulerBinding.instance.addPostFrameCallback((_){
 
-      registroProductoViewModel.init(formController:_formController,producto:widget.producto);
+      registroProductoViewModel.init(formController:_formController,producto:producto);
 
     });
 
+  }
+
+
+  @override
+  void didChangeDependencies(){
+    super.didChangeDependencies();
+
+    final Map<String,dynamic>args=ModalRoute.of(context)!.settings.arguments as Map<String,dynamic>;
+
+    producto=args["producto"]??{}; // Producto() es un
   }
 
   @override
@@ -44,11 +55,14 @@ class _RegistroProductoPageState extends State<RegistroProductoPage>{
                     icon:Icon(Icons.arrow_back),
                     onPressed:(){
 
-                      Navigator.of(context).pop();
+                      Map<String,dynamic>producto={};
+
+
+                      Navigator.of(context).pop(producto);
                     },
                   ),
                centerTitle:true,
-               title:widget.producto.isEmpty?Text("Registro Producto"):Text("Modificar Cliente")
+               title:producto.isEmpty?Text("Registro Producto"):Text("Modificar Cliente")
            ),
       body:bodytWidget(size),
     );
@@ -137,7 +151,7 @@ class _RegistroProductoPageState extends State<RegistroProductoPage>{
                             return;
                           }
 
-                          registroProductoViewModel.registrarProducto(formController:_formController,producto:widget.producto,
+                          registroProductoViewModel.registrarProducto(formController:_formController,producto:producto,
                               contextA:context);
 
 

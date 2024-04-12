@@ -19,7 +19,7 @@ final Map<String, Widget Function(BuildContext)>appRoutes={
   "ContadorProvidersPage": (_) => ContadorProvidersPage(),
   "ClientePage":(_)=>ClientePage(),
   "Producto":(_)=>ProductoPage(),
-  "formProducto":(_)=>RegistroProductoPage(producto:{}),
+  "formProducto":(_)=>RegistroProductoPage(),
   "formCliente":(_)=>RegistrosPage()
 
 };

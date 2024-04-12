@@ -31,8 +31,6 @@ class _ProductoPageState extends State<ProductoPage>{
     });
   }
 
-
-
   @override
   Widget build(BuildContext context){
     final size=MediaQuery.of(context).size;
@@ -41,10 +39,13 @@ class _ProductoPageState extends State<ProductoPage>{
                child:Icon(Icons.add),
                onPressed:(){
 
-                 Navigator.of(context).pushNamed("formProducto");
+                 Map<String,dynamic>producto={};
 
-                 Navigator.of(context).push(MaterialPageRoute(
-                     builder:(context)=>RegistroProductoPage(producto:{},)));
+                 Navigator.of(context).pushNamed("formProducto",
+                     arguments:{"producto":producto}
+                 );
+
+
                     //RegistroProductoPage
 
                },
@@ -108,8 +109,9 @@ class _ProductoPageState extends State<ProductoPage>{
                                              return;
                                           }
 
-                                          Navigator.of(context).push(MaterialPageRoute(
-                                              builder:(context)=>RegistroProductoPage(producto:producto,)));
+                                          Navigator.of(context).pushNamed("formProducto",
+                                              arguments:{"producto":producto}
+                                          );
                                           //RegistroProductoPage
 
 
